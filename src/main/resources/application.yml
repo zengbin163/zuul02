@@ -7,6 +7,10 @@ server:
 spring:
    application:
       name: zull-gateway-service
+   redis:
+      host: 47.115.34.118
+      port: 6379
+      password: famiao@2020
 
 logging:
    level:
@@ -43,7 +47,7 @@ management:
 
 #构建路由地址
 zuul:
-   routes:
+   routes:   #配置路由
       api-uid:
          path: /uid/**
          service-id: uid-service
@@ -54,6 +58,15 @@ zuul:
       connect-timeout-millis: 3000
       socket-timeout-millis: 3000
    ignored-patterns: /demo2/**   #不路由demo2开头的任意请求
+   ratelimit:   #配置限流
+      enabled: true
+      repository: redis   #对应存储类型(存储统计信息)
+      policy-list:    #配置路由的策略
+         api-uid:
+          - limit: 2   #每秒允许多少个请求
+            refresh-interval: 1   #刷新时间(单位秒)
+            type:   #可选(限流方式)
+             - url
 
 ribbon:
    ReadTimeout: 60000
