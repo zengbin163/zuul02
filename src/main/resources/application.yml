@@ -23,7 +23,7 @@ eureka:
    instance:
       hostname: ${spring.cloud.client.ip-address}
       prefer-ip-address: true      #以IP地址注册到服务中心
-      instance-id: ${spring.cloud.client.ip-address}:${server.port}      #eureka显示的instanceId
+      instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}:@project.version@      #eureka显示的instanceId
       ip-address: ${server.public.host}      #公网ip，如果是服务内网调用不需要声明这个
       non-secure-port: ${server.port}      #公网端口，如果是服务内网调用不需要声明这个
       lease-expiration-duration-in-seconds: 15      #服务过期时间配置,超过这个时间没有接收到心跳EurekaServer就会将这个实例剔除
@@ -51,9 +51,12 @@ zuul:
       api-uid:
          path: /uid/**
          service-id: uid-service
+      api-kafka:
+         path: /kafka/**
+         service-id: kafka-notify-service
       api-food:
          path: /food/**
-         service-id: uid-consumer
+         service-id: food-consumer
    host:
       connect-timeout-millis: 3000
       socket-timeout-millis: 3000
